@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Add Café</title>
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    form {
+      display: flex;
+      flex-direction: column;
+      max-width: 400px;
+      margin: 2rem auto;
+      gap: 1rem;
+    }
+
+    img {
+      max-width: 100%;
+      border-radius: 10px;
+    }
+
+    input[type="submit"] {
+      background-color: #0288d1;
+      color: white;
+      padding: 0.5rem;
+      border: none;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="../index.html">Home</a>
+    <a href="map.html">Map</a>
+    <a href="add.html">Add Café</a>
+    <a href="gallery.html">Gallery</a>
+  </nav>
+
+  <h2 style="text-align:center;">➕ Add New Café</h2>
+
+  <form id="cafeForm">
+    <input type="text" id="cafeName" placeholder="Enter Café Name" required />
+    <input type="file" id="cafeImage" accept="image/*" capture="environment" required />
+    <img id="preview" src="" alt="Preview" style="display: none;" />
+    <input type="submit" value="Save Café" />
+  </form>
+
+  <script>
+    const form = document.getElementById('cafeForm');
+    const imageInput = document.getElementById('cafeImage');
+    const preview = document.getElementById('preview');
+
+    // Show preview
+    imageInput.addEventListener('change', function () {
+      const file = this.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          preview.src = e.target.result;
+          preview.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // Save to localStorage
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const name = document.getElementById('cafeName').value;
+      const image = preview.src;
+
+      const newCafe = { name, image };
+
+      const existing = JSON.parse(localStorage.getItem('cafes') || '[]');
+      existing.push(newCafe);
+      localStorage.setItem('cafes', JSON.stringify(existing));
+
+      alert("Café added!");
+      form.reset();
+      preview.style.display = 'none';
+    });
+  </script>
+</body>
+</html>

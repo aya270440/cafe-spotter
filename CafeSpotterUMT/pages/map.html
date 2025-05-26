@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Café Map</title>
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    #map {
+      height: 90vh;
+      margin: 1rem;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="../index.html">Home</a>
+    <a href="map.html">Map</a>
+    <a href="add.html">Add Café</a>
+    <a href="gallery.html">Gallery</a>
+  </nav>
+
+  <h2 style="text-align:center;">📍 Find Cafés Near UMT</h2>
+  <div id="map"></div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <!-- Your JS -->
+  <script>
+    // Initialize the map
+    const map = L.map('map').setView([5.4204, 103.0510], 16); // Default to UMT
+
+    // Add OpenStreetMap tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Show current location
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+
+        // Set map view to user location
+        map.setView([lat, lng], 17);
+
+        // Add marker for user
+        L.marker([lat, lng]).addTo(map)
+          .bindPopup("You are here!").openPopup();
+      }, () => {
+        alert("Unable to get location.");
+      });
+    } else {
+      alert("Geolocation not supported.");
+    }
+
+    // Add café marker on click
+    map.on('click', function(e) {
+      const latlng = e.latlng;
+      const marker = L.marker([latlng.lat, latlng.lng]).addTo(map);
+      marker.bindPopup("New Café Location!").openPopup();
+
+      // You can enhance this by saving to localStorage later
+    });
+  </script>
+</body>
+</html>

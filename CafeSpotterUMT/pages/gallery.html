@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Café Gallery</title>
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+      padding: 1rem;
+    }
+
+    .cafe-card {
+      background: white;
+      border-radius: 10px;
+      padding: 0.5rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    .cafe-card img {
+      width: 100%;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="../index.html">Home</a>
+    <a href="map.html">Map</a>
+    <a href="add.html">Add Café</a>
+    <a href="gallery.html">Gallery</a>
+  </nav>
+
+  <h2 style="text-align:center;">📸 Café Gallery</h2>
+
+  <div class="gallery" id="gallery"></div>
+
+  <script>
+    const gallery = document.getElementById('gallery');
+    const cafes = JSON.parse(localStorage.getItem('cafes') || '[]');
+
+    cafes.forEach(cafe => {
+      const card = document.createElement('div');
+      card.className = 'cafe-card';
+      card.innerHTML = `
+        <img src="${cafe.image}" alt="${cafe.name}" />
+        <p>${cafe.name}</p>
+      `;
+      gallery.appendChild(card);
+    });
+  </script>
+</body>
+</html>
